@@ -1,0 +1,11 @@
+.DS_Store
+.classpath
+.project
+.gradle/
+.idea/
+.settings/
+.vscode/
+*.iml
+build/
+target/
+local.properties

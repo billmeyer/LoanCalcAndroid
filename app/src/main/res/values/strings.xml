@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Car Loan Calculator</string>
+    <string name="amount">Amount</string>
+    <string name="downpayment">Down Payment</string>
+    <string name="fees">Fees</string>
+    <string name="interest">Interest</string>
+    <string name="loan">Loan Amount</string>
+    <string name="months">Months</string>
+    <string name="rebates">Rebates</string>
+    <string name="rebatetax">Rebate before Tax</string>
+    <string name="taxtrade">Trade In before Tax</string>
+    <string name="monthly">Monthly Payment</string>
+    <string name="monthly_payment">Monthly Payment</string>
+    <string name="payment">Payment</string>
+    <string name="principal">Principal</string>
+    <string name="mo">MO</string>
+    <string name="no_data_avaliable">No Data Avaliable</string>
+    <string name="salestax">Sales Tax</string>
+    <string name="term">Term</string>
+    <string name="tradein">Trade In</string>
+    <string name="values_are_estimated">Values are Estimated</string>
+    <string name="years">Years</string>
+    <string name="home">Home</string>
+    <string name="amortization">amortization</string>
+    <string name="calculate">CALCULATE</string>
+    <string name="zero_amount">$0.00</string>
+    <string name="percent">%</string>
+    <string name="reductions_optional">Reductions (Optional)</string>
+    <string name="total_loan_cost">Total Cost</string>
+    <string name="beginning_balance">Beginning\nBalance</string>
+    <string name="ending_balance">Ending\nBalance</string>
+    <string name="month">Month</string>
+    <string name="amortization_schedule">Amortization Schedule</string>
+    <string name="total_interest">Total Interest</string>
+</resources>

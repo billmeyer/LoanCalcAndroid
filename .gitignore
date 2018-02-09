@@ -6,6 +6,7 @@
 .settings/
 .vscode/
 *.iml
+app/release/
 build/
 target/
 local.properties

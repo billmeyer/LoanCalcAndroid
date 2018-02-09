@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debugConfig {
+            keyAlias 'mySigningKey'
+            keyPassword 'password'
+            storeFile file('/Volumes/Duo1/android/io.billmeyer.keystore.jks')
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId 'io.billmeyer.loancalc'
@@ -13,6 +21,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debugConfig
+        }
+        debug {
+            signingConfig signingConfigs.debugConfig
         }
     }
     productFlavors {
@@ -23,7 +35,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.1.0'
     testCompile 'org.testng:testng:6.9.6'
-
     // Required for instrumented tests
     androidTestCompile 'com.android.support:support-annotations:24.0.0'
     androidTestCompile 'com.android.support.test:runner:0.5'

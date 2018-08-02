@@ -127,7 +127,7 @@ public class Loan implements Serializable
         return amortizationItems;
     }
 
-    private double calculateMonthlyPayment(double loanAmount, int termInYears, double interestRate)
+    private double calculateMonthlyPayment(double financedAmount, int termInYears, double interestRate)
     {
         // Convert tvInterest rate into a decimal. eg. 3.75% ==> 0.0375
         interestRate /= 100D;
@@ -139,7 +139,7 @@ public class Loan implements Serializable
         int termInMonths = termInYears * 12;
 
         // Calculate the monthly payment
-        double monthlyPayment = (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -termInMonths));
+        double monthlyPayment = (financedAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -termInMonths));
 
         return monthlyPayment;
     }

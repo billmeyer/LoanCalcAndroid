@@ -70,4 +70,10 @@ public class LoanCalcTest
         Assert.assertEquals(loan.getTotalLoanInterest(), 1670.9651780304994D);
         Assert.assertEquals(loan.getTotalCost(), 28370.9651780305D);
     }
+
+    @Test
+    public void simpleTest()
+    {
+        Assert.assertEquals(5+5, 10);
+    }
 }

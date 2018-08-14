@@ -6,6 +6,7 @@
 .settings/
 .vscode/
 *.iml
+*.xml
 app/release/
 build/
 reports/*

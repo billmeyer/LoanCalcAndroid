@@ -41,5 +41,7 @@ devices:
     envs:
     - key: class
       value: io.billmeyer.loancalc.LoanCalcTest#calcLoanViaUI,io.billmeyer.loancalc.LoanCalcTest#calcLoanViaAPI,io.billmeyer.loancalc.LoanCalcTest#simpleTest
+    - key: class
+      value: io.billmeyer.loancalc.HelloWorld
     # - key: package
     #   value: io.billmeyer.loancalc

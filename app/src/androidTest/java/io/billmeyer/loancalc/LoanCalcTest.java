@@ -1,21 +1,28 @@
 package io.billmeyer.loancalc;
 
-import android.support.test.espresso.ViewInteraction;
+import android.os.Environment;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 import io.billmeyer.loancalc.model.Loan;
 import junit.framework.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -38,8 +45,7 @@ public class LoanCalcTest
      * the activity under test. To get a reference to the activity you can use
      * the {@link ActivityTestRule#getActivity()} method.
      */
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void calcLoanViaUI()
@@ -52,7 +58,9 @@ public class LoanCalcTest
         onView(withId(R.id.etTradeIn)).perform(typeText("7500"), closeSoftKeyboard());
         onView(withId(R.id.etFees)).perform(typeText("300"), closeSoftKeyboard());
 
+        takeScreenshot("BeforeCalc");
         onView(withId(R.id.btnCalculate)).perform(click());
+        takeScreenshot("AfterCalc");
 
         onView(withId(R.id.tvLoanTotal)).check(matches(withText("$20,370.97")));
         onView(withId(R.id.tvMonthlyPaymentVal)).check(matches(withText("$339.52")));
@@ -74,6 +82,63 @@ public class LoanCalcTest
     @Test
     public void simpleTest()
     {
-        Assert.assertEquals(5+5, 10);
+        Assert.assertEquals(5 + 5, 10);
     }
+
+    @Rule public TestRule watcher = new TestWatcher()
+    {
+        @Override
+        protected void failed(Throwable e, Description description)
+        {
+            takeScreenshot(description);
+//            // Save to external storage (usually /sdcard/screenshots)
+//            File path = new File(
+//                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/screenshots/" + InstrumentationRegistry
+//                            .getTargetContext().getPackageName());
+//            if (!path.exists())
+//            {
+//                path.mkdirs();
+//            }
+//
+//            // Take advantage of UiAutomator screenshot method
+//            android.support.test.uiautomator.UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+//            String filename = description.getClassName() + "-" + description.getMethodName() + ".png";
+//            device.takeScreenshot(new File(path, filename));
+        }
+    };
+
+    protected void takeScreenshot(Description description)
+    {
+        takeScreenshot(description.getClassName() + "-" + description.getMethodName());
+    }
+
+    protected void takeScreenshot(String description)
+    {
+        // Save to external storage (usually /sdcard/screenshots)
+
+        String strPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/screenshots/" + InstrumentationRegistry
+                .getTargetContext().getPackageName();
+
+        Log.i("LoanCalcTest", "Screenshot Path: " + strPath);
+
+        File path = new File(strPath);
+        if (!path.exists())
+        {
+            path.mkdirs();
+        }
+
+        // Take advantage of UiAutomator screenshot method
+        android.support.test.uiautomator.UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        String filename = description + ".png";
+        device.takeScreenshot(new File(path, filename));
+    }
+
+//    public static void screenshot(String screenshotName) throws Exception {
+//        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
+//        File e = getFilesDirectory(context, Locale.getDefault());
+//        String screenshotFileName = System.currentTimeMillis() + "_" + screenshotName + ".png";
+//        File screenshotFile = new File(e, screenshotFileName);
+//
+//        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).takeScreenshot(screenshotFile);
+//    }
 }

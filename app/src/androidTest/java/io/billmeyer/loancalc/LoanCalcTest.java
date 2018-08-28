@@ -1,5 +1,9 @@
 package io.billmeyer.loancalc;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -7,8 +11,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
+import com.squareup.spoon.Spoon;
 import io.billmeyer.loancalc.model.Loan;
 import junit.framework.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -17,6 +23,8 @@ import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.Currency;
+import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -47,6 +55,39 @@ public class LoanCalcTest
      */
     @Rule public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
+    @Before
+    public void setLocale()
+    {
+        Context context = InstrumentationRegistry.getTargetContext();
+
+//        Locale locale = Locale.ITALY;
+//        Locale locale = Locale.UK;
+        Locale locale = Locale.US;
+        Locale.setDefault(locale);
+
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.JELLY_BEAN)
+        {
+            configuration.setLocale(locale);
+        }
+        else
+        {
+            configuration.locale = locale;
+        }
+
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+        MainActivity mainActivity = mActivityRule.getActivity();
+
+        Intent intent = mainActivity.getIntent();
+        mainActivity.finish();
+        mainActivity.startActivity(intent);
+
+        Currency currency = Currency.getInstance(Locale.getDefault());
+        String symbol = currency.getSymbol();
+    }
+
     @Test
     public void calcLoanViaUI()
     {
@@ -58,9 +99,11 @@ public class LoanCalcTest
         onView(withId(R.id.etTradeIn)).perform(typeText("7500"), closeSoftKeyboard());
         onView(withId(R.id.etFees)).perform(typeText("300"), closeSoftKeyboard());
 
-        takeScreenshot("BeforeCalc");
+        Spoon.screenshot(mActivityRule.getActivity(), "BeforeCalc");
+
         onView(withId(R.id.btnCalculate)).perform(click());
-        takeScreenshot("AfterCalc");
+
+        Spoon.screenshot(mActivityRule.getActivity(), "AfterCalc");
 
         onView(withId(R.id.tvLoanTotal)).check(matches(withText("$20,370.97")));
         onView(withId(R.id.tvMonthlyPaymentVal)).check(matches(withText("$339.52")));
@@ -90,55 +133,7 @@ public class LoanCalcTest
         @Override
         protected void failed(Throwable e, Description description)
         {
-            takeScreenshot(description);
-//            // Save to external storage (usually /sdcard/screenshots)
-//            File path = new File(
-//                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/screenshots/" + InstrumentationRegistry
-//                            .getTargetContext().getPackageName());
-//            if (!path.exists())
-//            {
-//                path.mkdirs();
-//            }
-//
-//            // Take advantage of UiAutomator screenshot method
-//            android.support.test.uiautomator.UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//            String filename = description.getClassName() + "-" + description.getMethodName() + ".png";
-//            device.takeScreenshot(new File(path, filename));
+            Spoon.screenshot(mActivityRule.getActivity(), "FailedTest");
         }
     };
-
-    protected void takeScreenshot(Description description)
-    {
-        takeScreenshot(description.getClassName() + "-" + description.getMethodName());
-    }
-
-    protected void takeScreenshot(String description)
-    {
-        // Save to external storage (usually /sdcard/screenshots)
-
-        String strPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/screenshots/" + InstrumentationRegistry
-                .getTargetContext().getPackageName();
-
-        Log.i("LoanCalcTest", "Screenshot Path: " + strPath);
-
-        File path = new File(strPath);
-        if (!path.exists())
-        {
-            path.mkdirs();
-        }
-
-        // Take advantage of UiAutomator screenshot method
-        android.support.test.uiautomator.UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        String filename = description + ".png";
-        device.takeScreenshot(new File(path, filename));
-    }
-
-//    public static void screenshot(String screenshotName) throws Exception {
-//        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
-//        File e = getFilesDirectory(context, Locale.getDefault());
-//        String screenshotFileName = System.currentTimeMillis() + "_" + screenshotName + ".png";
-//        File screenshotFile = new File(e, screenshotFileName);
-//
-//        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).takeScreenshot(screenshotFile);
-//    }
 }

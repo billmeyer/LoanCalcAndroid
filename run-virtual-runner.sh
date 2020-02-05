@@ -2,8 +2,10 @@
 
 APPAPK=./app/build/outputs/apk/debug/app-debug.apk
 TESTAPK=./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-DEVICE1='Google Pixel GoogleAPI Emulator,platformVersion=7.1'
-DEVICE2='LG Nexus 4 GoogleAPI Emulator,platformVersion=4.4'
+#DEVICE1='Google Pixel GoogleAPI Emulator,platformVersion=7.1'
+#DEVICE2='LG Nexus 4 GoogleAPI Emulator,platformVersion=4.4'
+DEVICE1='Google Pixel 3 XL GoogleAPI Emulator,platformVersion=10.0'
+DEVICE2='Google Pixel C GoogleAPI Emulator,platformVersion=8.1'
 
 # Run all test:
 # sauce-runner-virtual --framework espresso --user ${SAUCE_USERNAME} --api-key ${SAUCE_ACCESS_KEY} --app ${APPAPK} --test-app ${TESTAPK} \
